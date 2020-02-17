@@ -1,0 +1,52 @@
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <a class="navbar-brand" routerLink="/home">St Nicholas Inventory</a>
+    <button class="navbar-toggler" type="button" (click)="isCollapsed = !isCollapsed"
+        aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarSupportedContent" [collapse]="isCollapsed">
+        <ul class="navbar-nav mr-auto">
+            <li class="nav-item">
+                <a class="nav-link" routerLink="/home">Home</a>
+            </li>
+            <li class="nav-item dropdown" dropdown>
+                <a class="nav-link dropdown-toggle" href="javascript:void(0)" id="navbarDropdown" role="button" dropdownToggle
+                    aria-haspopup="true" aria-expanded="false">
+                    Inventory
+                </a>
+                <div *dropdownMenu class="dropdown-menu" aria-labelledby="navbarDropdown">
+                    <a class="dropdown-item" routerLink="/view-inventory">View Inventory Items</a>
+                    <a class="dropdown-item" routerLink="/items-in-stock">View In Stock Quantities</a>
+                    <a class="dropdown-item" routerLink="/add-item">Add New Order</a>
+                    <div class="dropdown-divider"></div>
+                    <a class="dropdown-item" routerLink="/sell-item">Mark Items Sold</a>
+                </div>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" routerLink="/manage-alerts">Manage Inventory Alerts</a>
+            </li>
+            <li class="nav-item dropdown" dropdown>
+                <a class="nav-link dropdown-toggle" href="javascript:void(0)" id="navbarDropdown" role="button" dropdownToggle
+                    aria-haspopup="true" aria-expanded="false">
+                    Yearly Statistics
+                </a>
+                <div *dropdownMenu class="dropdown-menu" aria-labelledby="navbarDropdown">
+                    <a class="dropdown-item" routerLink="/statistics/yearly-item-sold-count">Item Sold Count</a>
+                    <a class="dropdown-item" routerLink="/statistics/yearly-item-sold-profit">Item Sold Profit</a>
+                    <a class="dropdown-item" routerLink="/statistics/yearly-item-sold-cashflow">Item Sold Cashflow</a>
+                </div>
+            </li>
+            <li class="nav-item dropdown" dropdown>
+                <a class="nav-link dropdown-toggle" href="javascript:void(0)" id="navbarDropdown" role="button" dropdownToggle
+                    aria-haspopup="true" aria-expanded="false">
+                    Item Statistics
+                </a>
+                <div *dropdownMenu class="dropdown-menu" aria-labelledby="navbarDropdown">
+                    <a class="dropdown-item" routerLink="/statistics/item-sold-count-breakdown">Item Sale Count Breakdown</a>
+                    <a class="dropdown-item" routerLink="/statistics/item-sold-profit-breakdown">Item Profit Breakdown</a>
+                    <a class="dropdown-item" routerLink="/statistics/item-sold-cashflow-breakdown">Item Cashflow Breakdown</a>
+                </div>
+            </li>
+        </ul>
+    </div>
+</nav>

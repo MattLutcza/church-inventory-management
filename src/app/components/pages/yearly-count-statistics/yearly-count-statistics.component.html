@@ -1,0 +1,44 @@
+<h4 class="m-4 text-center">Monthly Sale Counts</h4>
+<div class="mx-4">
+  <tabset #tabs>
+    <tab heading="Monthly">
+      <ngx-charts-bar-vertical-2d
+        (window:resize)="onResize($event)"
+        [scheme]="colorScheme"
+        [results]="soldItemsChartData"
+        [view]="chartSize"
+        [xAxis]="true"
+        [yAxis]="true"
+        [legend]="true"
+        [showYAxisLabel]="true"
+        [xAxisLabel]="'Month'"
+        [yAxisLabel]="'Number Of Items'"
+        [legendTitle]="'Years'"
+        [legendPosition]="'bottom'"
+        [yScaleMax]="yScaleMaxForNumItems"
+        [barPadding]="4"
+        [groupPadding]="8">
+      </ngx-charts-bar-vertical-2d>
+    </tab>
+    <tab heading="Year to Date">
+      <ngx-charts-bar-vertical-2d
+        (window:resize)="onResize($event)"
+        [scheme]="colorScheme"
+        [results]="soldItemsYearToDateChartData"
+        [view]="chartSize"
+        [xAxis]="true"
+        [yAxis]="true"
+        [legend]="true"
+        [showYAxisLabel]="true"
+        [xAxisLabel]="'Month'"
+        [yAxisLabel]="'Number Of Items'"
+        [legendTitle]="'Years'"
+        [legendPosition]="'bottom'"
+        [yScaleMax]="yScaleMaxForYearToDateNumItems"
+        [barPadding]="4"
+        [groupPadding]="8">
+      </ngx-charts-bar-vertical-2d>
+    </tab>
+  </tabset>  
+</div>
+

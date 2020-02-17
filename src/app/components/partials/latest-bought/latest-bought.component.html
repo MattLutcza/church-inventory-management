@@ -1,0 +1,11 @@
+<div class="card">
+    <div class="card-header">
+        <strong>Latest Items Ordered</strong>
+    </div>
+    <ul class="list-group list-group-flush">
+        <li *ngFor="let item of latestPurchases" class="list-group-item">
+            {{ item.name }}
+            <span class="badge badge-primary badge-pill float-right">{{ item.purchaseDate | date: 'shortDate' }}</span>
+        </li>
+    </ul>
+</div>

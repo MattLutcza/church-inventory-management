@@ -1,0 +1,149 @@
+<div class="container">
+    <h4 class="m-4 text-center">Add Order</h4>
+    <form [formGroup]="orderForm" autocomplete="off" class="m-1">
+        <div class="border border-secondary rounded p-3 my-2">
+            <h4>Order Information</h4>
+            <div class="form-row">
+                <div class="form-group col">
+                    <label for="supplier">Supplier</label>
+                    <input id="supplier" class="form-control" [formControl]="orderForm.controls.supplier"
+                        [typeahead]="previouslyEnteredSuppliers">
+                    <div [hidden]="orderForm.controls.supplier.valid || orderForm.controls.supplier.pristine" class="alert alert-danger">
+                        Please enter in a value.
+                    </div>
+                </div>
+                <div class="form-group col">
+                    <label>Donated</label>
+                    <select id="donated" class="custom-select" [formControl]="orderForm.controls.donated">
+                        <option value="Yes">Yes</option>
+                        <option value="No">No</option>
+                    </select>
+                </div>
+                <div class="form-group col">
+                    <label>Shipping / Tax Cost</label>
+                    <input class="form-control" [formControl]="orderForm.controls.shippingTaxCost" (blur)="calculatePerItemShippingTaxCost()">
+                    <div [hidden]="orderForm.controls.shippingTaxCost.valid || orderForm.controls.shippingTaxCost.pristine" class="alert alert-danger">
+                        Please enter in a number.
+                    </div>
+                    <div [hidden]="orderForm.controls.shippingTaxCost.invalid || !perItemShippingTaxCost" class="alert alert-info">
+                        {{ perItemShippingTaxCost }} per item
+                    </div>
+                </div>
+                <div class="form-group col">
+                    <label>Purchase Date</label>
+                    <input id="sellDate" type="text" class="form-control" [formControl]="orderForm.controls.purchaseDate" bsDatepicker />
+                    <div [hidden]="orderForm.controls.purchaseDate.valid" class="alert alert-danger">
+                        Please select a valid date.
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div *ngFor="let orderDetailForm of orderDetailFormArrayControls; let formIndex = index" class="border border-secondary rounded p-3 my-2">
+            <h4>Item Details</h4>
+            <div class="form-row">
+                <div class="form-group col">
+                    <label>Item</label>
+                    <input type="text" class="form-control" [formControl]="orderDetailForm.controls.itemName"
+                        [typeahead]="previouslyEnteredItems" (typeaheadOnBlur)="prepopulateOtherItemInputs(formIndex)"
+                        (typeaheadOnSelect)="prepopulateOtherItemInputs(formIndex)">
+                    <div [hidden]="orderDetailForm.controls.itemName.valid || orderDetailForm.controls.itemName.pristine" class="alert alert-danger">
+                        Please enter in a value.
+                    </div>
+                </div>
+                <div class="form-group col">
+                    <label>Category</label>
+                    <input type="text" class="form-control" [formControl]="orderDetailForm.controls.category"
+                        [typeahead]="previouslyEnteredCategories">
+                    <div [hidden]="orderDetailForm.controls.category.valid || orderDetailForm.controls.category.pristine" class="alert alert-danger">
+                        Please enter in a value.
+                    </div>
+                </div>
+                <div class="form-group col">
+                    <label>Sub Category</label>
+                    <input type="text" class="form-control" [formControl]="orderDetailForm.controls.subcategory"
+                        [typeahead]="previouslyEnteredSubcategories">
+                    <div [hidden]="orderDetailForm.controls.subcategory.valid || orderDetailForm.controls.subcategory.pristine" class="alert alert-danger">
+                        Please enter in a value.
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group col">
+                    <label>Item Cost</label>
+                    <input type="number" class="form-control" [formControl]="orderDetailForm.controls.itemCost">
+                    <div [hidden]="orderDetailForm.controls.itemCost.valid || orderDetailForm.controls.itemCost.pristine" class="alert alert-danger">
+                        Please enter in a number.
+                    </div>
+                </div>
+                <div class="form-group col">
+                    <label>Quantity</label>
+                    <input type="number" class="form-control" [formControl]="orderDetailForm.controls.itemQuantity"
+                        (change)="calculatePerItemShippingTaxCost()">
+                    <div [hidden]="orderDetailForm.controls.itemQuantity.valid || orderDetailForm.controls.itemQuantity.pristine" class="alert alert-danger">
+                        Please enter in a number.
+                    </div>
+                </div>
+                <div class="form-group col">
+                    <label>Price Item Will Be Sold At</label>
+                    <input type="number" class="form-control" [formControl]="orderDetailForm.controls.sellPrice">
+                    <div [hidden]="orderDetailForm.controls.sellPrice.valid || orderDetailForm.controls.sellPrice.pristine" class="alert alert-danger">
+                        Please enter in a number.
+                    </div>
+                </div>
+            </div>
+
+            <div class="text-center" *ngIf="orderDetailFormArray.length > 1">
+                <button class="btn btn-link" (click)="removeItemInputFields(formIndex)">Remove Item Details</button>
+            </div>
+        </div>
+        <div class="text-center">
+            <button class="btn btn-link" (click)="addAnotherOrderDetail()">Add More Item Details</button>
+        </div>
+        <div>
+            <button class="btn btn-secondary float-left" (click)="openConfirmResetFormLayer(confirmResetFormLayer)">
+                Reset
+            </button>
+            <button type="submit" class="btn btn-primary float-right"
+                [disabled]="orderForm.invalid" (click)="submitOrder(successfullyMarkedSoldLayer)">
+                Submit Order
+            </button>
+        </div>
+    </form>
+</div>
+
+<ng-template #confirmResetFormLayer>
+    <div class="modal-header">
+        <h4 class="modal-title pull-left">Reset Form</h4>
+        <button type="button" class="close pull-right" aria-label="Close" (click)="closeModal()">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body">
+        Are you sure you want to clear all the input you've entered?
+    </div>
+    <div class="modal-body text-center">
+        <button type="button" class="btn btn-primary" (click)="resetForm()">
+            Reset
+        </button>
+    </div>
+</ng-template>
+
+<ng-template #successfullyMarkedSoldLayer>
+    <div class="modal-header">
+        <h4 class="modal-title pull-left">Success!</h4>
+    </div>
+    <div class="modal-body">
+        Your order of items were successfully added to the inventory.
+    </div>
+    <div class="modal-body">
+        <button type="button" class="btn btn-secondary float-left" (click)="resetForm()">
+            Stay Here
+        </button>
+        <button type="button" routerLink="/view-inventory" class="btn btn-primary float-right"
+            (click)="closeModal()">
+            View Inventory
+        </button>
+    </div>
+</ng-template>

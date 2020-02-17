@@ -1,0 +1,12 @@
+<div *ngFor="let alert of activeAlerts; let i = index">
+    <div class="alert alert-danger" role="alert">
+        <button type="button" class="close" (click)="hideAlert(i)" aria-label="Hide Alert"
+            tooltip="Hide Alert">
+            <span aria-hidden="true">&times;</span>
+        </button>
+        <div><strong>Reminder</strong></div>
+        The number of {{ alert.appliesToItems[0] }} inventory items is getting low! You should think about ordering some more.
+    </div>
+</div>
+<!-- TODO: Many alerts for one item each, or one alert for many items? -->
+

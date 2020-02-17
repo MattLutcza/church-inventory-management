@@ -1,0 +1,49 @@
+import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
+import { YearlyChartService } from 'src/app/services/yearly-chart.service';
+
+@Component({
+  selector: 'app-yearly-profit-statistics',
+  templateUrl: './yearly-profit-statistics.component.html',
+  styleUrls: ['./yearly-profit-statistics.component.scss']
+})
+export class YearlyProfitStatisticsComponent implements OnInit {
+
+  // Chart data
+  profitChartData: any[];
+  yScaleMaxForProfit: number;
+  profitYearToDateChartData: any[];
+  yScaleMaxForYearToDateProfit: number;
+
+  // Other chart options
+  chartSize;
+  colorScheme;
+
+  constructor(private route: ActivatedRoute, private yearlyChartService: YearlyChartService) {
+    this.chartSize = [innerWidth / 1.1, 500];
+  }
+
+  ngOnInit(): void {
+    this.route.data.subscribe(data => {
+      // If the yearly chart service didn't parse/create the chart data yet, we need to do that.
+      if (!this.yearlyChartService.isChartDataInitialized) {
+        this.yearlyChartService.constructInventoryMonthAndYearMap(data.inventoryItems);
+        this.yearlyChartService.constructChartData();
+      }
+      this.profitChartData = this.yearlyChartService.soldItemsProfitChartData;
+      this.yScaleMaxForProfit = this.yearlyChartService.soldItemsProfitChartMaxY;
+      this.profitYearToDateChartData = this.yearlyChartService.soldItemsProfitYearToDateChartData;
+      this.yScaleMaxForYearToDateProfit = this.yearlyChartService.soldItemsProfitYearToDateChartMaxY;
+      this.colorScheme = {
+        domain: this.yearlyChartService.determineColors(data.inventoryItems)
+      };
+    });
+  }
+
+  onResize(event) {
+    this.chartSize = [event.target.innerWidth / 1.1, 500];
+  }
+
+}
+
+//TODO: Year To Date

@@ -1,0 +1,39 @@
+<div class="mt-2">
+    <h4 class="m-4 text-center">Item Sale Count Breakdown</h4>
+    <tabset #tabs [justified]="true">
+        <tab heading="All Years">
+            <div class="pie-chart-center">
+                <ngx-charts-pie-chart
+                    [view]="view"
+                    [scheme]="colorScheme"
+                    [results]="yearData['total']"
+                    [legend]="showLegend"
+                    [legendTitle]="Items"
+                    [legendPosition]="'bottom'"
+                    [explodeSlices]="explodeSlices"
+                    [labels]="showLabels"
+                    [trimLabels]="false"
+                    [doughnut]="doughnut">
+                </ngx-charts-pie-chart>
+            </div>
+        </tab>
+        <tab *ngFor="let year of years" [heading]="year" [active]="year === currentYear"> 
+            <div class="pie-chart-center">
+                <ngx-charts-pie-chart
+                    [view]="view"
+                    [scheme]="colorScheme"
+                    [results]="yearData[year]"
+                    [legend]="showLegend"
+                    [legendTitle]="Items"
+                    [legendPosition]="'bottom'"
+                    [explodeSlices]="explodeSlices"
+                    [labels]="showLabels"
+                    [trimLabels]="false"
+                    [doughnut]="doughnut">
+                </ngx-charts-pie-chart>          
+            </div>  
+        </tab>
+    </tabset>
+</div>
+
+

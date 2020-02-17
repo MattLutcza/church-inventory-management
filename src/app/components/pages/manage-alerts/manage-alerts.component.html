@@ -1,0 +1,175 @@
+<div class="container">
+    <h4 class="m-4 text-center">Manage Inventory Alerts</h4>
+    <div *ngIf="alerts.length === 0" class="card my-2">
+        <div class="card-body text-center">
+            <h5 class="card-title">No Alerts</h5>
+            <h6 class="card-subtitle mb-2 text-muted">You do not have any alerts setup</h6>
+        </div>
+    </div>
+
+    <div *ngFor="let alert of alerts; let i = index" class="card my-2">
+        <div class="card-body">
+            <button type="button" class="close" (click)="openModal(deleteAlertLayer, i)" aria-label="Delete Alert"
+                tooltip="Delete Alert">
+                <span aria-hidden="true">&times;</span>
+            </button>
+            <h5 class="card-title">{{ alert.title }}</h5>
+            <h6 class="card-subtitle mb-2 text-muted">Alert ID: {{ alert.id }}</h6>
+        </div>
+        <ul class="list-group list-group-flush">
+            <li class="list-group-item">Applies to Items:
+                <span *ngFor="let item of alert.appliesToItems; let lastItem = last">
+                    {{ item }}<span *ngIf="!lastItem">, </span>
+                </span>
+            </li>
+            <li class="list-group-item">Alert when: {{ alert.reminderQuantity }} items remaining</li>
+        </ul>
+        <div class="card-body">
+            <button class="btn btn-link" (click)="openEditAlertLayer(editAlertLayer, i)">Edit Alert</button>
+        </div>
+    </div>
+    <div class="text-center my-2">
+        <button class="btn btn-primary" (click)="openAddAlertLayer(addAlertLayer)">Add New Alert</button>
+    </div>
+</div>
+
+<ng-template #deleteAlertLayer>
+    <div class="modal-header">
+        <h4 class="modal-title pull-left">Delete Confirmation</h4>
+        <button type="button" class="close pull-right" aria-label="Close" (click)="closeModal()">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body">
+        Are you sure you want to delete this alert?
+    </div>
+    <div class="modal-body text-center">
+        <button type="button" class="btn btn-primary" (click)="deleteAlert(modalAlertIndex)">
+            Delete Alert
+        </button>
+    </div>
+</ng-template>
+
+<ng-template #addAlertLayer>
+    <div class="modal-header">
+        <h4 class="modal-title pull-left">Add Alert</h4>
+        <button type="button" class="close pull-right" aria-label="Close" (click)="closeModal()">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body">
+        <div class="form-group">
+            <label for="alertTitleInput">Alert Title</label>
+            <input id="alertTitleInput" type="text" class="form-control"
+                [formControl]="alertForm.controls.alertTitle"
+                autocomplete="off" />
+            <div [hidden]="alertForm.controls.alertTitle.valid || alertForm.controls.alertTitle.pristine" class="alert alert-danger">
+                Please enter in a title for the alert.
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="appliesToItemsInput">Applies To Items</label>
+            <div class="mb-2">
+                <span *ngFor="let itemSelection of appliesToItemSelections" class="p-1 mr-1 border rounded item-selection">
+                    <span>{{ itemSelection }}</span>
+                    <button type="button" aria-label="Close" class="close close-no-float ml-1" (click)="removeItemSelection(itemSelection)">
+                        <span >&times;</span>
+                    </button>
+                </span>
+            </div>
+            <input id="appliesToItemsInput" class="form-control"
+                [formControl]="alertForm.controls.altertForItem"
+                [typeahead]="possibleItemSelections"
+                (typeaheadOnBlur)="handleApplyToItemSelection()"
+                (typeaheadOnSelect)="handleApplyToItemSelection()"
+                (blur)="checkIfItemSelectionsAreValid()"
+                placeholder="Add Item"
+                autocomplete="off" />
+            <div [hidden]="alertForm.controls.altertForItem.pristine || alertForm.controls.altertForItem.valid || appliesToItemSelections.length !== 0"
+                class="alert alert-danger">
+                Select a valid item that this alert will be for.
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="alertAtQuantity">Alert When</label>
+            <div class="input-group mb-2">
+                <input id="alertAtQuantity" type="number" class="form-control"
+                    [formControl]="alertForm.controls.alertAtQuantity" />
+                <div class="input-group-append">
+                    <div class="input-group-text">items remaining</div>
+                </div>
+            </div>
+            <div [hidden]="alertForm.controls.alertAtQuantity.valid || alertForm.controls.alertAtQuantity.pristine" class="alert alert-danger">
+                Enter in number (greater than zero)
+            </div>
+        </div>
+    </div>
+    <div class="modal-body text-center">
+        <button type="button" class="btn btn-primary"
+            (click)="addAlert()" [disabled]="alertForm.invalid || appliesToItemSelections.length === 0">
+            Add Alert
+        </button>
+    </div>
+</ng-template>
+
+<ng-template #editAlertLayer>
+    <div class="modal-header">
+        <h4 class="modal-title pull-left">Edit Alert</h4>
+        <button type="button" class="close pull-right" aria-label="Close" (click)="closeModal()">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body">
+        <div class="form-group">
+            <label for="alertTitleInput">Alert Title</label>
+            <input id="alertTitleInput" type="text" class="form-control"
+                [formControl]="alertForm.controls.alertTitle"
+                autocomplete="off" />
+            <div [hidden]="alertForm.controls.alertTitle.valid || alertForm.controls.alertTitle.pristine" class="alert alert-danger">
+                Please enter in a title for the alert.
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="appliesToItemsInput">Applies To Items</label>
+            <div class="mb-2">
+                <span *ngFor="let itemSelection of appliesToItemSelections" class="p-1 mr-1 border rounded item-selection">
+                    <span>{{ itemSelection }}</span>
+                    <button type="button" aria-label="Close" class="close close-no-float ml-1" (click)="removeItemSelection(itemSelection)">
+                        <span>&times;</span>
+                    </button>
+                </span>
+            </div>
+            <input id="appliesToItemsInput" class="form-control"
+                [formControl]="alertForm.controls.altertForItem"
+                [typeahead]="possibleItemSelections"
+                (typeaheadOnBlur)="handleApplyToItemSelection()"
+                (typeaheadOnSelect)="handleApplyToItemSelection()"
+                (blur)="checkIfItemSelectionsAreValid()"
+                placeholder="Add Item"
+                autocomplete="off" />
+            <div [hidden]="alertForm.controls.altertForItem.pristine || alertForm.controls.altertForItem.valid || appliesToItemSelections.length !== 0"
+                class="alert alert-danger">
+                Select a valid item that this alert will be for.
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="alertAtQuantity">Alert When</label>
+            <div class="input-group mb-2">
+                <input id="alertAtQuantity" type="number" class="form-control"
+                    [formControl]="alertForm.controls.alertAtQuantity" />
+                <div class="input-group-append">
+                    <div class="input-group-text">items remaining</div>
+                </div>
+            </div>
+            <div [hidden]="alertForm.controls.alertAtQuantity.valid || alertForm.controls.alertAtQuantity.pristine" class="alert alert-danger">
+                Enter in number (greater than zero)
+            </div>
+        </div>
+    </div>
+    <div class="modal-body text-center">
+        <button type="button" class="btn btn-primary" (click)="saveAlertChanges()"
+            [disabled]="alertForm.invalid || appliesToItemSelections.length === 0">
+            Save Changes
+        </button>
+    </div>
+</ng-template>
