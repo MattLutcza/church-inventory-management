@@ -108,7 +108,9 @@ export class SellItemComponent implements OnInit {
    */
   private getUnsoldInventoryItems(inventoryItems: InventoryItem[]): InventoryItem[] {
     return inventoryItems.filter((inventoryItem: InventoryItem) => {
-      return inventoryItem.sellDate === undefined || inventoryItem.sellDate === 'N/A';
+      if (!inventoryItem.sellDate) {
+        return inventoryItem;
+      }
     });
   }
 

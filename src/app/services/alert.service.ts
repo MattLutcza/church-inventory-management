@@ -13,7 +13,7 @@ export class AlertService {
    */
   getAlerts(): Alert[] {
     if(this.alerts === undefined) {
-      this.alerts = this.retrieveFakeAlerts();
+      this.alerts = []; //this.retrieveFakeAlerts();
     }
     return this.alerts;
   }

@@ -18,6 +18,7 @@ export class HomeComponent {
         this.route.data.subscribe(data => {
             this.alerts = data.inventoryAlerts;
             this.inventoryItems = data.inventoryItems;
+            console.log(this.inventoryItems);
         });
     }
 

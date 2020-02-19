@@ -1,12 +1,20 @@
-<div class="container">
-    <h4 class="m-4 text-center">Home Dashboard</h4>
-    <alerts [alerts]="alerts" [inventoryItems]="inventoryItems"></alerts>
-    <div class="row">
-        <div class="col-sm-6">
-            <latest-sold [inventoryItems]="inventoryItems"></latest-sold>
-        </div>
-        <div class="col-sm-6">
-            <latest-bought [inventoryItems]="inventoryItems"></latest-bought>
-        </div>
-    </div>    
+<h4 class="m-4 text-center">Home Dashboard</h4>
+<!-- No Items In Inventory Message-->
+<div *ngIf="inventoryItems.length === 0" >
+    <app-no-items></app-no-items>     
 </div>
+<!-- Normal Home Display -->
+<div *ngIf="inventoryItems.length > 0">
+    <div class="container">
+        <alerts [alerts]="alerts" [inventoryItems]="inventoryItems"></alerts>
+        <div class="row">
+            <div class="col-sm-6">
+                <latest-sold [inventoryItems]="inventoryItems"></latest-sold>
+            </div>
+            <div class="col-sm-6">
+                <latest-bought [inventoryItems]="inventoryItems"></latest-bought>
+            </div>
+        </div> 
+    </div> 
+</div>     
+

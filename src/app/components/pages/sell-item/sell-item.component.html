@@ -1,89 +1,94 @@
-<div class="container">
-    <h4 class="m-4 text-center">Mark Item Sold</h4>
-    <div class="row">
-        <div class="col-sm">
-            <form [formGroup]="markItemSoldForm" autocomplete="off">
-                <div *ngFor="let itemForm of itemFormArrayControls; let formIndex = index" class="border border-secondary rounded p-3 my-2">
-                    <div class="form-group">
-                        <label>Item ID</label>
-                        <input class="form-control" [formControl]="itemForm.controls.itemID"
-                            [typeahead]="itemSelections[formIndex]" (typeaheadOnBlur)="handleItemInputChange(formIndex)"
-                            (typeaheadOnSelect)="handleItemInputChange(formIndex)" (blur)="validateID(formIndex)" />
-                        <div [hidden]="itemForm.controls.itemID.valid || itemForm.controls.itemID.pristine" class="alert alert-danger">
-                            Please select an item ID that exists. Numbers only. No duplicates.
-                        </div>
-                        <div *ngIf="displayedInventoryItems[formIndex]">
-                            <div class="card iventory-item-card">
-                                <div class="card-body">
-                                    <h5 class="card-title">{{ displayedInventoryItems[formIndex].name }} (ID: {{ displayedInventoryItems[formIndex].id }})</h5>
-                                    <p class="card-text">
-                                        {{ displayedInventoryItems[formIndex].description }}
-                                    </p>
-                                    <p class="card-text">
-                                        Purchased Date: {{ displayedInventoryItems[formIndex].purchaseDate | date: "shortDate"}}
-                                    </p>
-                                    <p class="card-text">
-                                        Purchased Price: {{ displayedInventoryItems[formIndex].purchasePrice | currency }}
-                                    </p>
-                                    <p class="card-text">
-                                        Selling Price: {{ displayedInventoryItems[formIndex].sellPrice | currency }}
-                                    </p>
-                                    <p class="card-text">
-                                        <small class="text-muted">
-                                            {{ displayedInventoryItems[formIndex].category }} - {{ displayedInventoryItems[formIndex].subcategory }}
-                                        </small>
-                                    </p>
+<h4 class="m-4 text-center">Mark Item Sold</h4>
+<div *ngIf="unsoldInventoryItems.length === 0">
+    <app-no-items-in-stock></app-no-items-in-stock>
+</div>
+<div *ngIf="unsoldInventoryItems.length > 0">
+    <div class="container">    
+        <div class="row">
+            <div class="col-sm">
+                <form [formGroup]="markItemSoldForm" autocomplete="off">
+                    <div *ngFor="let itemForm of itemFormArrayControls; let formIndex = index" class="border border-secondary rounded p-3 my-2">
+                        <div class="form-group">
+                            <label>Item ID</label>
+                            <input class="form-control" [formControl]="itemForm.controls.itemID"
+                                [typeahead]="itemSelections[formIndex]" (typeaheadOnBlur)="handleItemInputChange(formIndex)"
+                                (typeaheadOnSelect)="handleItemInputChange(formIndex)" (blur)="validateID(formIndex)" />
+                            <div [hidden]="itemForm.controls.itemID.valid || itemForm.controls.itemID.pristine" class="alert alert-danger">
+                                Please select an item ID that exists. Numbers only. No duplicates.
+                            </div>
+                            <div *ngIf="displayedInventoryItems[formIndex]">
+                                <div class="card iventory-item-card">
+                                    <div class="card-body">
+                                        <h5 class="card-title">{{ displayedInventoryItems[formIndex].name }} (ID: {{ displayedInventoryItems[formIndex].id }})</h5>
+                                        <p class="card-text">
+                                            {{ displayedInventoryItems[formIndex].description }}
+                                        </p>
+                                        <p class="card-text">
+                                            Purchased Date: {{ displayedInventoryItems[formIndex].purchaseDate | date: "shortDate"}}
+                                        </p>
+                                        <p class="card-text">
+                                            Purchased Price: {{ displayedInventoryItems[formIndex].purchasePrice | currency }}
+                                        </p>
+                                        <p class="card-text">
+                                            Selling Price: {{ displayedInventoryItems[formIndex].sellPrice | currency }}
+                                        </p>
+                                        <p class="card-text">
+                                            <small class="text-muted">
+                                                {{ displayedInventoryItems[formIndex].category }} - {{ displayedInventoryItems[formIndex].subcategory }}
+                                            </small>
+                                        </p>
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
 
-                    <div class="form-group">
-                        <label>Sell Date</label>
-                        <input type="text" class="form-control" [formControl]="itemForm.controls.sellDate" bsDatepicker />
-                        <div [hidden]="itemForm.controls.sellDate.valid" class="alert alert-danger">
-                            Please select a valid date.
+                        <div class="form-group">
+                            <label>Sell Date</label>
+                            <input type="text" class="form-control" [formControl]="itemForm.controls.sellDate" bsDatepicker />
+                            <div [hidden]="itemForm.controls.sellDate.valid" class="alert alert-danger">
+                                Please select a valid date.
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label>Sell Price</label>
+                            <input type="text" class="form-control" [formControl]="itemForm.controls.sellPrice" (blur)="checkSellPrice(formIndex)"/>
+                            <div [hidden]="itemForm.controls.sellPrice.valid || itemForm.controls.sellPrice.pristine" class="alert alert-danger">
+                                Please enter in a price.
+                            </div>
+                            <div [hidden]="(itemForm.controls.itemID.invalid || itemForm.controls.itemID.untouched) || !displaySellPriceInfoMessageArray[formIndex] || itemForm.controls.sellPrice.invalid" class="alert alert-info">
+                                <span *ngIf="displayedInventoryItems[formIndex]">
+                                    Price entered is different from original sell price of {{ displayedInventoryItems[formIndex].sellPrice | currency }}
+                                </span>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <fieldset>
+                                <label>Purchased With</label>
+                                <select class="form-control" [formControl]="itemForm.controls.sellMethod">
+                                    <option [value]="sellMethod" *ngFor="let sellMethod of possibleSellMethods">
+                                        {{ sellMethod }}
+                                    </option>
+                                </select>
+                            </fieldset>
+                        </div>
+                        <div class="text-center" *ngIf="itemFormArray.length > 1">
+                            <button class="btn btn-link" (click)="removeInputFields(formIndex)">Remove Item</button>
                         </div>
                     </div>
-                    <div class="form-group">
-                        <label>Sell Price</label>
-                        <input type="text" class="form-control" [formControl]="itemForm.controls.sellPrice" (blur)="checkSellPrice(formIndex)"/>
-                        <div [hidden]="itemForm.controls.sellPrice.valid || itemForm.controls.sellPrice.pristine" class="alert alert-danger">
-                            Please enter in a price.
-                        </div>
-                        <div [hidden]="(itemForm.controls.itemID.invalid || itemForm.controls.itemID.untouched) || !displaySellPriceInfoMessageArray[formIndex] || itemForm.controls.sellPrice.invalid" class="alert alert-info">
-                            <span *ngIf="displayedInventoryItems[formIndex]">
-                                Price entered is different from original sell price of {{ displayedInventoryItems[formIndex].sellPrice | currency }}
-                            </span>
-                        </div>
+                    <div class="text-center">
+                        <button class="btn btn-link" (click)="addAnotherItemToSellForm()">Sell Another Item</button>
                     </div>
-                    <div class="form-group">
-                        <fieldset>
-                            <label>Purchased With</label>
-                            <select class="form-control" [formControl]="itemForm.controls.sellMethod">
-                                <option [value]="sellMethod" *ngFor="let sellMethod of possibleSellMethods">
-                                    {{ sellMethod }}
-                                </option>
-                            </select>
-                        </fieldset>
+                    <div>
+                        <button class="btn btn-secondary float-left" (click)="openConfirmResetFormLayer(confirmResetFormLayer)">
+                            Reset
+                        </button>
+                        <button type="submit" class="btn btn-primary float-right" (click)="markItemsAsSold(successfullyMarkedSoldLayer)"
+                            [disabled]="markItemSoldForm.invalid">
+                            Submit
+                        </button>
                     </div>
-                    <div class="text-center" *ngIf="itemFormArray.length > 1">
-                        <button class="btn btn-link" (click)="removeInputFields(formIndex)">Remove Item</button>
-                    </div>
-                </div>
-                <div class="text-center">
-                    <button class="btn btn-link" (click)="addAnotherItemToSellForm()">Sell Another Item</button>
-                </div>
-                <div>
-                    <button class="btn btn-secondary float-left" (click)="openConfirmResetFormLayer(confirmResetFormLayer)">
-                        Reset
-                    </button>
-                    <button type="submit" class="btn btn-primary float-right" (click)="markItemsAsSold(successfullyMarkedSoldLayer)"
-                        [disabled]="markItemSoldForm.invalid">
-                        Submit
-                    </button>
-                </div>
-            </form>
+                </form>
+            </div>
         </div>
     </div>
 </div>

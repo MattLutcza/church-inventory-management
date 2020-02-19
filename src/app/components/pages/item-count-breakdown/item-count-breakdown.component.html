@@ -1,5 +1,8 @@
-<div class="mt-2">
-    <h4 class="m-4 text-center">Item Sale Count Breakdown</h4>
+<h4 class="m-4 text-center">Item Sale Count Breakdown</h4>
+<div *ngIf="!hasSoldItems">
+    <app-no-items-sold></app-no-items-sold>
+</div>
+<div *ngIf="hasSoldItems" class="mt-2">
     <tabset #tabs [justified]="true">
         <tab heading="All Years">
             <div class="pie-chart-center">

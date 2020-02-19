@@ -33,15 +33,25 @@ export class ItemCashflowBreakdownComponent implements OnInit {
   yearlyItemDataMap: Map<string, Map<string, ItemData>>;
   yearlyItemChartDataMap: Map<string, any[]>
 
+  hasSoldItems: boolean;
+
   constructor(private route: ActivatedRoute) {}
 
   ngOnInit() {
     this.route.data.subscribe(data => {
-      const inventoryItems = data.inventoryItems;
-      this.gatherItemData(inventoryItems);
+      this.hasSoldItems = this.checkIfAnyItemsAreSold(data.inventoryItems);
+      this.gatherItemData(data.inventoryItems);
       this.createChartData();
     });
     this.currentYear = new Date().getFullYear().toString();
+  }
+
+  private checkIfAnyItemsAreSold(inventoryItems: InventoryItem[]) {
+    return inventoryItems.filter((item) => {
+      if (item.sellDate) {
+        return item;
+      }
+    }).length > 0;
   }
 
   private gatherItemData(inventoryItems: InventoryItem[]) {

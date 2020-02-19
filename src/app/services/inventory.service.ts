@@ -26,9 +26,9 @@ export class InventoryService {
 
     getInventoryItems(): InventoryItem[] {
         if(this.inventoryItems === undefined) {
-            this.inventoryItems = this.retrieveFakeInventory();
-          }
-          return this.inventoryItems;
+            this.inventoryItems = []; // this.retrieveFakeInventory();
+        }
+        return this.inventoryItems;
     }
 
     private retrieveFakeInventory(): InventoryItem[] {

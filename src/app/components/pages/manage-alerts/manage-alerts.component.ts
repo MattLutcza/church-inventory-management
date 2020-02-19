@@ -23,6 +23,8 @@ export class ManageAlertsComponent implements OnInit {
   appliesToItemSelections: string[];
   possibleItemSelections: string[];
 
+  hasUnsoldItems: boolean;
+
   private inventoryItems: InventoryItem[];
 
   constructor(private modalService: BsModalService, private alertService: AlertService,
@@ -65,6 +67,9 @@ export class ManageAlertsComponent implements OnInit {
   private initializeItemSelections(inventoryItems: InventoryItem[]) {
     // only allow the user to create alerts from the unsold items
     const unsoldInventoryItems = this.getUnsoldInventoryItems(inventoryItems);
+    console.log(inventoryItems);
+    console.log(unsoldInventoryItems);
+    this.hasUnsoldItems = unsoldInventoryItems.length > 0;
 
     // initialize the item selections
     const itemSelections = [];
@@ -79,7 +84,9 @@ export class ManageAlertsComponent implements OnInit {
    */
   private getUnsoldInventoryItems(inventoryItems: InventoryItem[]): InventoryItem[] {
     return inventoryItems.filter((inventoryItem: InventoryItem) => {
-      return inventoryItem.sellDate === undefined || inventoryItem.sellDate === 'N/A';
+      if (!inventoryItem.sellDate) {
+        return inventoryItem;
+      }
     });
   }
 

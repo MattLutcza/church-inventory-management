@@ -114,7 +114,7 @@ export class AddItemComponent implements OnInit {
     itemFormGroup.controls.category.setValue(itemToUse.category);
     itemFormGroup.controls.subcategory.setValue(itemToUse.subcategory);
     itemFormGroup.controls.sellPrice.setValue(itemToUse.sellPrice);
-    itemFormGroup.controls.itemCost.setValue(itemToUse.purchasePrice - itemToUse.taxAndShippingPrice);
+    itemFormGroup.controls.itemCost.setValue(itemToUse.purchasePrice);
   }
 
   calculatePerItemShippingTaxCost(): void {
@@ -167,6 +167,7 @@ export class AddItemComponent implements OnInit {
     const purchaseDate = this.orderForm.controls.purchaseDate.value;
 
     let lastUsedID = this.getHighestItemID();
+    let newID = lastUsedID + 1;
     let totalNumberOfItems = 0;
 
     for(let counter = 0; counter < this.orderDetailFormArray.length; counter = counter + 1) {
@@ -179,8 +180,7 @@ export class AddItemComponent implements OnInit {
       const itemSellPrice = itemFormGroup.controls.sellPrice.value;
       const itemCost = itemFormGroup.controls.itemCost.value;
 
-      for(let itemCounter = 0; itemCounter < numberOfItems; itemCounter = itemCounter + 1) {
-        const newID = lastUsedID + itemCounter + 1;
+      for(let itemCounter = 0; itemCounter < numberOfItems; itemCounter = itemCounter + 1) {        
         const newItem = {
           id: newID,
           name: itemName,
@@ -192,8 +192,9 @@ export class AddItemComponent implements OnInit {
           taxAndShippingPrice: shippingTaxCost,
           sellPrice: itemSellPrice,
           purchaseDate: purchaseDate
-        };
+        };        
         newItems.push(newItem);
+        newID += 1;
       }
     }
 
@@ -202,7 +203,6 @@ export class AddItemComponent implements OnInit {
     const dividedTaxAndShippingCost = shippingTaxCost / totalNumberOfItems;
     newItems.forEach(item => {
       item.taxAndShippingPrice = dividedTaxAndShippingCost;
-      item.purchasePrice = item.purchasePrice + item.taxAndShippingPrice;
     });
 
     this.inventoryService.addNewInventoryItems(newItems);

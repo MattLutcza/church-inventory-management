@@ -43,6 +43,9 @@ import { ItemCountBreakdownComponent } from './components/pages/item-count-break
 import { ItemProfitBreakdownComponent } from './components/pages/item-profit-breakdown/item-profit-breakdown.component';
 import { ItemCashflowBreakdownComponent } from './components/pages/item-cashflow-breakdown/item-cashflow-breakdown.component';
 import { ItemsInStockComponent } from './components/pages/items-in-stock/items-in-stock.component';
+import { NoItemsComponent } from './components/partials/no-items/no-items.component';
+import { NoItemsInStockComponent } from './components/partials/no-items-in-stock/no-items-in-stock.component';
+import { NoItemsSoldComponent } from './components/partials/no-items-sold/no-items-sold.component';
 
 
 @NgModule({
@@ -64,7 +67,10 @@ import { ItemsInStockComponent } from './components/pages/items-in-stock/items-i
     ItemCountBreakdownComponent,
     ItemProfitBreakdownComponent,
     ItemCashflowBreakdownComponent,
-    ItemsInStockComponent
+    ItemsInStockComponent,
+    NoItemsComponent,
+    NoItemsInStockComponent,
+    NoItemsSoldComponent
   ],
   imports: [
     BrowserModule,

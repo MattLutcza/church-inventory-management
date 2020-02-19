@@ -1,4 +1,7 @@
 <h4 class="m-4 text-center">Inventory</h4>
-<div class="mx-3">
+<div *ngIf="inventoryItems.length === 0">
+    <app-no-items></app-no-items>     
+</div>
+<div *ngIf="inventoryItems.length > 0">
     <inventory [inventoryItems]="inventoryItems"></inventory>
 </div>

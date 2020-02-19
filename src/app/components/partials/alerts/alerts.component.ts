@@ -23,19 +23,20 @@ export class AlertsComponent implements OnInit {
     }
 
     private determineActiveAlerts(): void {
-
-
         // Populate the item count map
         this.itemCountMap = new Map();
-        this.inventoryItems.forEach(item => {
+        const unsoldInventoryItems = this.inventoryItems.filter((item) => {
+            if (!item.sellDate) {
+                return item;
+            }
+        });
+        unsoldInventoryItems.forEach(item => {            
            if (this.itemCountMap.get(item.name)) {
                 this.itemCountMap.set(item.name, this.itemCountMap.get(item.name) + 1);
            } else {
                 this.itemCountMap.set(item.name, 1);
            }
         });
-        console.log(this.itemCountMap);
-
 
         // determine active alerts
         this.activeAlerts = [];

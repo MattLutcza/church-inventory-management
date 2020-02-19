@@ -1,120 +1,122 @@
-<div class="btn-group mt-1">
-    <label class="btn btn-primary" [(ngModel)]="displaySelection" btnRadio="All Items" tabindex="0" role="button" (click)="changeDisplayedItems()">All Items</label>
-    <label class="btn btn-primary" [(ngModel)]="displaySelection" btnRadio="Unsold Items" tabindex="0" role="button" (click)="changeDisplayedItems()">Unsold Items</label>
-    <label class="btn btn-primary" [(ngModel)]="displaySelection" btnRadio="Sold Items" tabindex="0" role="button" (click)="changeDisplayedItems()">Sold Items</label>
-</div>
-<table class="table table-bordered table-hover">
-    <thead class="thead-dark">
-        <tr>
-            <th scope="col" (click)="sortBy('id')">
-                <span>ID</span>
-            </th>
-            <th scope="col" (click)="sortBy('name')">
-                Item
-            </th>
-            <th scope="col" (click)="sortBy('category')">
-                Category
-            </th>
-            <th scope="col" (click)="sortBy('subcategory')">
-                Sub Category
-            </th>
-            <th scope="col" (click)="sortBy('supplier')">
-                Supplier
-            </th>
-            <th scope="col">
-                Donated
-            </th>
-            <th scope="col" (click)="sortBy('itemCost')">
-                Item Cost
-            </th>
-            <th scope="col" (click)="sortBy('taxShipping')">
-                Taxes / Shipping
-            </th>
-            <th scope="col" (click)="sortBy('selingPrice')">
-                Selling Price
-            </th>
-            <th scope="col">
-                Mark Up
-            </th>
-            <th scope="col">
-                Profit
-            </th>
-            <th scope="col" (click)="sortBy('purchaseDate')">
-                Purchase Date
-            </th>
-            <th *ngIf="displaySelection !== 'Unsold Items'" scope="col" (click)="sortBy('sellDate')">
-                Sell Date
-            </th>
-            <th scope="col">
-                Days In Inventory
-            </th>
-            <th *ngIf="displaySelection !== 'Unsold Items'" scope="col" (click)="sortBy('sellMethod')">
-                Sell Method
-            </th>
-        </tr>
-    </thead>
-    <tbody>
-        <tr *ngFor="let item of tableItems">
-            <td>
-                {{ item.id }}
-            </td>
-            <td>
-                {{ item.name }}
-            </td>
-            <td>
-                {{ item.category }}
-            </td>
-            <td>
-                {{ item.subcategory }}
-            </td>
-            <td>
-                {{ item.supplier }}
-            </td>
-            <td>
-                {{ item.donated }}
-            </td>
-            <td>
-                {{ item.purchasePrice | currency }}
-            </td>
-            <td>
-                {{ item.taxAndShippingPrice | currency }}
-            </td>
-            <td>
-                {{ item.sellPrice | currency }}
-            </td>
-            <td>
-                {{ calculateMarkUpPercent(item.sellPrice, item.purchasePrice) | percent }}
-            </td>
-            <td *ngIf="item.donated === 'Yes'">
-                {{ item.sellPrice | currency }}
-            </td>
-            <td *ngIf="item.donated === 'No'">
-                {{ item.sellPrice - item.purchasePrice | currency }}
-            </td>
-            <td>
-                {{ item.purchaseDate | date: 'shortDate' }}
-            </td>
-            <td *ngIf="displaySelection !== 'Unsold Items'">
-                {{ item.sellDate | date: 'shortDate' }}
-            </td>
-            <td *ngIf="item.sellDate">
-                {{ determineDaysBetweenDates(item.purchaseDate, item.sellDate) }}
-            </td>
-            <td *ngIf="!item.sellDate">
-                {{ determineDaysBetweenDates(item.purchaseDate, todayDate) }}
-            </td>
-            <td *ngIf="displaySelection !== 'Unsold Items'">
-                {{ item.sellMethod }}
-            </td>
-        </tr>
-    </tbody>
-</table>
-<div class="row">
-    <div class="col-xs-12 col-12">
-        <pagination 
-            [totalItems]="displayableInventoryItems.length" 
-            [itemsPerPage]="itemsPerPage"
-            (pageChanged)="pageChanged($event)">
-    </pagination>
+<div class="mx-3">
+    <div class="btn-group mt-1">
+        <label class="btn btn-primary" [(ngModel)]="displaySelection" btnRadio="All Items" tabindex="0" role="button" (click)="changeDisplayedItems()">All Items</label>
+        <label class="btn btn-primary" [(ngModel)]="displaySelection" btnRadio="Unsold Items" tabindex="0" role="button" (click)="changeDisplayedItems()">Unsold Items</label>
+        <label class="btn btn-primary" [(ngModel)]="displaySelection" btnRadio="Sold Items" tabindex="0" role="button" (click)="changeDisplayedItems()">Sold Items</label>
+    </div>
+    <table class="table table-bordered table-hover">
+        <thead class="thead-dark">
+            <tr>
+                <th scope="col" (click)="sortBy('id')">
+                    <span>ID</span>
+                </th>
+                <th scope="col" (click)="sortBy('name')">
+                    Item
+                </th>
+                <th scope="col" (click)="sortBy('category')">
+                    Category
+                </th>
+                <th scope="col" (click)="sortBy('subcategory')">
+                    Sub Category
+                </th>
+                <th scope="col" (click)="sortBy('supplier')">
+                    Supplier
+                </th>
+                <th scope="col">
+                    Donated
+                </th>
+                <th scope="col" (click)="sortBy('itemCost')">
+                    Item Cost
+                </th>
+                <th scope="col" (click)="sortBy('taxShipping')">
+                    Taxes / Shipping
+                </th>
+                <th scope="col" (click)="sortBy('selingPrice')">
+                    Selling Price
+                </th>
+                <th scope="col">
+                    Mark Up
+                </th>
+                <th scope="col">
+                    Profit
+                </th>
+                <th scope="col" (click)="sortBy('purchaseDate')">
+                    Purchase Date
+                </th>
+                <th *ngIf="displaySelection !== 'Unsold Items'" scope="col" (click)="sortBy('sellDate')">
+                    Sell Date
+                </th>
+                <th scope="col">
+                    Days In Inventory
+                </th>
+                <th *ngIf="displaySelection !== 'Unsold Items'" scope="col" (click)="sortBy('sellMethod')">
+                    Sell Method
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let item of tableItems">
+                <td>
+                    {{ item.id }}
+                </td>
+                <td>
+                    {{ item.name }}
+                </td>
+                <td>
+                    {{ item.category }}
+                </td>
+                <td>
+                    {{ item.subcategory }}
+                </td>
+                <td>
+                    {{ item.supplier }}
+                </td>
+                <td>
+                    {{ item.donated }}
+                </td>
+                <td>
+                    {{ item.purchasePrice | currency }}
+                </td>
+                <td>
+                    {{ item.taxAndShippingPrice | currency }}
+                </td>
+                <td>
+                    {{ item.sellPrice | currency }}
+                </td>
+                <td>
+                    {{ calculateMarkUpPercent(item.sellPrice, item.purchasePrice) | percent }}
+                </td>
+                <td *ngIf="item.donated === 'Yes'">
+                    {{ item.sellPrice | currency }}
+                </td>
+                <td *ngIf="item.donated === 'No'">
+                    {{ item.sellPrice - item.purchasePrice | currency }}
+                </td>
+                <td>
+                    {{ item.purchaseDate | date: 'shortDate' }}
+                </td>
+                <td *ngIf="displaySelection !== 'Unsold Items'">
+                    {{ item.sellDate | date: 'shortDate' }}
+                </td>
+                <td *ngIf="item.sellDate">
+                    {{ determineDaysBetweenDates(item.purchaseDate, item.sellDate) }}
+                </td>
+                <td *ngIf="!item.sellDate">
+                    {{ determineDaysBetweenDates(item.purchaseDate, todayDate) }}
+                </td>
+                <td *ngIf="displaySelection !== 'Unsold Items'">
+                    {{ item.sellMethod }}
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <div class="row">
+        <div class="col-xs-12 col-12">
+            <pagination 
+                [totalItems]="displayableInventoryItems.length" 
+                [itemsPerPage]="itemsPerPage"
+                (pageChanged)="pageChanged($event)">
+        </pagination>
+        </div>
     </div>
 </div>

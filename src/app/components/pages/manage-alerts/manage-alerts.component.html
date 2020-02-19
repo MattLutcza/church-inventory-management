@@ -1,37 +1,42 @@
-<div class="container">
-    <h4 class="m-4 text-center">Manage Inventory Alerts</h4>
-    <div *ngIf="alerts.length === 0" class="card my-2">
-        <div class="card-body text-center">
-            <h5 class="card-title">No Alerts</h5>
-            <h6 class="card-subtitle mb-2 text-muted">You do not have any alerts setup</h6>
+<h4 class="m-4 text-center">Manage Inventory Alerts</h4>
+<div *ngIf="!hasUnsoldItems">
+    <app-no-items-in-stock></app-no-items-in-stock>
+</div>
+<div *ngIf="hasUnsoldItems">
+    <div class="container">
+        <div *ngIf="alerts.length === 0" class="card my-2">
+            <div class="card-body text-center">
+                <h5 class="card-title">No Alerts</h5>
+                <h6 class="card-subtitle mb-2 text-muted">You do not have any alerts setup</h6>
+            </div>
         </div>
-    </div>
-
-    <div *ngFor="let alert of alerts; let i = index" class="card my-2">
-        <div class="card-body">
-            <button type="button" class="close" (click)="openModal(deleteAlertLayer, i)" aria-label="Delete Alert"
-                tooltip="Delete Alert">
-                <span aria-hidden="true">&times;</span>
-            </button>
-            <h5 class="card-title">{{ alert.title }}</h5>
-            <h6 class="card-subtitle mb-2 text-muted">Alert ID: {{ alert.id }}</h6>
+        <div *ngFor="let alert of alerts; let i = index" class="card my-2">
+            <div class="card-body">
+                <button type="button" class="close" (click)="openModal(deleteAlertLayer, i)" aria-label="Delete Alert"
+                    tooltip="Delete Alert">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <h5 class="card-title">{{ alert.title }}</h5>
+                <h6 class="card-subtitle mb-2 text-muted">Alert ID: {{ alert.id }}</h6>
+            </div>
+            <ul class="list-group list-group-flush">
+                <li class="list-group-item">Applies to Items:
+                    <span *ngFor="let item of alert.appliesToItems; let lastItem = last">
+                        {{ item }}<span *ngIf="!lastItem">, </span>
+                    </span>
+                </li>
+                <li class="list-group-item">Alert when: {{ alert.reminderQuantity }} items remaining</li>
+            </ul>
+            <div class="card-body">
+                <button class="btn btn-link" (click)="openEditAlertLayer(editAlertLayer, i)">Edit Alert</button>
+            </div>
         </div>
-        <ul class="list-group list-group-flush">
-            <li class="list-group-item">Applies to Items:
-                <span *ngFor="let item of alert.appliesToItems; let lastItem = last">
-                    {{ item }}<span *ngIf="!lastItem">, </span>
-                </span>
-            </li>
-            <li class="list-group-item">Alert when: {{ alert.reminderQuantity }} items remaining</li>
-        </ul>
-        <div class="card-body">
-            <button class="btn btn-link" (click)="openEditAlertLayer(editAlertLayer, i)">Edit Alert</button>
+        <div class="text-center my-2">
+            <button class="btn btn-primary" (click)="openAddAlertLayer(addAlertLayer)">Add New Alert</button>
         </div>
-    </div>
-    <div class="text-center my-2">
-        <button class="btn btn-primary" (click)="openAddAlertLayer(addAlertLayer)">Add New Alert</button>
     </div>
 </div>
+
 
 <ng-template #deleteAlertLayer>
     <div class="modal-header">

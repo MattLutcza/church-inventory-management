@@ -1,26 +1,31 @@
 <h4 class="m-4 text-center">In Stock Item Quantity</h4>
-<div class="mx-3">
-    <table class="table table-bordered table-hover text-center">
-        <caption>Item Quantity</caption>
-        <thead class="thead-dark">
-            <tr>
-                <th scope="col">
-                    Item
-                </th>
-                <th scope="col">
-                    Quantity Remaining
-                </th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr *ngFor="let itemQuantity of inventoryItemQuantities | keyvalue">
-                <td>
-                    {{ itemQuantity.key }}
-                </td>
-                <td>
-                    {{ itemQuantity.value }}
-                </td>
-            </tr>
-        </tbody>
-    </table>
+<div *ngIf="inventoryItemQuantities.size === 0">
+    <app-no-items-in-stock></app-no-items-in-stock>
+</div>
+<div *ngIf="inventoryItemQuantities.size > 0">
+    <div class="mx-3">
+        <table class="table table-bordered table-hover text-center">
+            <caption>Item Quantity</caption>
+            <thead class="thead-dark">
+                <tr>
+                    <th scope="col">
+                        Item
+                    </th>
+                    <th scope="col">
+                        Quantity Remaining
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let itemQuantity of inventoryItemQuantities | keyvalue">
+                    <td>
+                        {{ itemQuantity.key }}
+                    </td>
+                    <td>
+                        {{ itemQuantity.value }}
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
 </div>
