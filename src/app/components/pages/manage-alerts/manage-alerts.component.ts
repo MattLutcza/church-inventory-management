@@ -67,8 +67,6 @@ export class ManageAlertsComponent implements OnInit {
   private initializeItemSelections(inventoryItems: InventoryItem[]) {
     // only allow the user to create alerts from the unsold items
     const unsoldInventoryItems = this.getUnsoldInventoryItems(inventoryItems);
-    console.log(inventoryItems);
-    console.log(unsoldInventoryItems);
     this.hasUnsoldItems = unsoldInventoryItems.length > 0;
 
     // initialize the item selections

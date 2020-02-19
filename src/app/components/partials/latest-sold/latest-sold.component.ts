@@ -23,7 +23,6 @@ export class LatestSoldComponent implements OnInit {
 
     retrieveLatestSoldItems(): InventoryItem[] {
         const latestSales = [];
-        console.log(this.inventoryItems);
         const inventoryItemsCopy = [...this.inventoryItems];
         inventoryItemsCopy.sort((item1, item2) => {
 
@@ -49,8 +48,6 @@ export class LatestSoldComponent implements OnInit {
                 latestSales.push(inventoryItemsCopy[counter]);
             }
         }
-
-        console.log(this.inventoryItems);
 
         return latestSales;
     }
