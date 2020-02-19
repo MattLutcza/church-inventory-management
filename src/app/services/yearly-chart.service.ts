@@ -40,6 +40,10 @@ export class YearlyChartService {
   get isChartDataInitialized() {
     return this.isDataInitialized;
   }
+  
+  set isChartDataInitialized(isDataInitialized: boolean) {
+    this.isDataInitialized = isDataInitialized;
+  }
 
   get soldItemsCountChartData() {
     return this.soldItemsChartData;

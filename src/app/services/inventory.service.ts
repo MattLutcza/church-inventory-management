@@ -1,12 +1,13 @@
 import { Injectable } from '@angular/core';
 import { InventoryItem } from '../models/inventory-item';
+import { YearlyChartService } from './yearly-chart.service';
 
 @Injectable()
 export class InventoryService {
 
     inventoryItems: InventoryItem[];
 
-    constructor() {}
+    constructor(private yearlyChartService: YearlyChartService) {}
 
     addNewInventoryItems(newItems: InventoryItem[]): void {
         this.inventoryItems.push(...newItems);
@@ -22,6 +23,7 @@ export class InventoryService {
         this.inventoryItems[index].sellDate = sellDate;
         this.inventoryItems[index].sellMethod = sellMethod;
         this.inventoryItems[index].sellPrice = sellPrice;
+        this.yearlyChartService.isChartDataInitialized = false;
     }
 
     getInventoryItems(): InventoryItem[] {
