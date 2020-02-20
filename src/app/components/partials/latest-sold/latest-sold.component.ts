@@ -43,7 +43,7 @@ export class LatestSoldComponent implements OnInit {
             }
         }).reverse();
 
-        for(let counter = 0; counter < this.numberOfSalesToDisplay; counter = counter + 1) {
+        for(let counter = 0; counter < this.numberOfSalesToDisplay && counter < inventoryItemsCopy.length; counter = counter + 1) {
             if(inventoryItemsCopy[counter].sellDate) {
                 latestSales.push(inventoryItemsCopy[counter]);
             }

@@ -24,8 +24,9 @@ export class LatestBoughtComponent implements OnInit {
 
     retrieveLatestPurchasedItems(): InventoryItem[] {
         const latestPurchases = [];
+        const inventoryItemsCopy = [...this.inventoryItems];
 
-        this.inventoryItems.sort((item1, item2) => {
+        inventoryItemsCopy.sort((item1, item2) => {
             if (item1.purchaseDate > item2.purchaseDate) {
                 return 1;
             } else if (item1.purchaseDate < item2.purchaseDate) {
@@ -35,8 +36,8 @@ export class LatestBoughtComponent implements OnInit {
             }
         }).reverse();
 
-        for(let counter = 0; counter < this.numberOfPurchasesToDisplay; counter = counter + 1) {
-            latestPurchases.push(this.inventoryItems[counter]);
+        for(let counter = 0; counter < this.numberOfPurchasesToDisplay && counter < inventoryItemsCopy.length; counter = counter + 1) {
+            latestPurchases.push(inventoryItemsCopy[counter]);
         }
 
         return latestPurchases;
