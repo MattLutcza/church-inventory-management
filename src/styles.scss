@@ -1,5 +1,23 @@
 .pie-chart-center {
+    width: 100%;
+    padding-bottom: 33%;
+    text-align: center;
+}
+
+.chart-wrapper {
+    max-width: 80%;
+    height: calc(100vh - 16px);
+    text-align: center;
     margin-left: auto;
     margin-right: auto;
-    width: 50%
 }
+
+@media (max-width:600px){
+    .pie-chart-center {
+        padding-bottom: 45%;
+    }
+    .chart-wrapper {
+        max-width: 95%;
+    }
+}
+
