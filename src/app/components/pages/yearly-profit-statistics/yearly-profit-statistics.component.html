@@ -6,6 +6,7 @@
   <tabset #tabs>
     <tab heading="Monthly">
       <ngx-charts-bar-vertical-2d
+        (window:resize)="onResize($event)"
         [scheme]="colorScheme"
         [results]="profitChartData"
         [view]="chartSize"
@@ -24,6 +25,7 @@
     </tab>
     <tab heading="Year to Date">
       <ngx-charts-bar-vertical-2d
+        (window:resize)="onResize($event)"
         [scheme]="colorScheme"
         [results]="profitYearToDateChartData"
         [view]="chartSize"

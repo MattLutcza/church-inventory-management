@@ -3,7 +3,7 @@
     <form [formGroup]="orderForm" autocomplete="off" class="m-1">
         <div class="border border-secondary rounded p-3 my-2">
             <h4>Order Information</h4>
-            <div class="form-row">
+            <div class='order-section'>
                 <div class="form-group col">
                     <label for="supplier">Supplier</label>
                     <input id="supplier" class="form-control" [formControl]="orderForm.controls.supplier"
@@ -41,7 +41,7 @@
 
         <div *ngFor="let orderDetailForm of orderDetailFormArrayControls; let formIndex = index" class="border border-secondary rounded p-3 my-2">
             <h4>Item Details</h4>
-            <div class="form-row">
+            <div class='item-section'>
                 <div class="form-group col">
                     <label>Item</label>
                     <input type="text" class="form-control" [formControl]="orderDetailForm.controls.itemName"
@@ -49,32 +49,6 @@
                         (typeaheadOnSelect)="prepopulateOtherItemInputs(formIndex)">
                     <div [hidden]="orderDetailForm.controls.itemName.valid || orderDetailForm.controls.itemName.pristine" class="alert alert-danger">
                         Please enter in a value.
-                    </div>
-                </div>
-                <div class="form-group col">
-                    <label>Category</label>
-                    <input type="text" class="form-control" [formControl]="orderDetailForm.controls.category"
-                        [typeahead]="previouslyEnteredCategories">
-                    <div [hidden]="orderDetailForm.controls.category.valid || orderDetailForm.controls.category.pristine" class="alert alert-danger">
-                        Please enter in a value.
-                    </div>
-                </div>
-                <div class="form-group col">
-                    <label>Sub Category</label>
-                    <input type="text" class="form-control" [formControl]="orderDetailForm.controls.subcategory"
-                        [typeahead]="previouslyEnteredSubcategories">
-                    <div [hidden]="orderDetailForm.controls.subcategory.valid || orderDetailForm.controls.subcategory.pristine" class="alert alert-danger">
-                        Please enter in a value.
-                    </div>
-                </div>
-            </div>
-
-            <div class="form-row">
-                <div class="form-group col">
-                    <label>Item Cost</label>
-                    <input type="number" class="form-control" [formControl]="orderDetailForm.controls.itemCost">
-                    <div [hidden]="orderDetailForm.controls.itemCost.valid || orderDetailForm.controls.itemCost.pristine" class="alert alert-danger">
-                        Please enter in a number.
                     </div>
                 </div>
                 <div class="form-group col">
@@ -86,13 +60,36 @@
                     </div>
                 </div>
                 <div class="form-group col">
+                    <label>Category</label>
+                    <input type="text" class="form-control" [formControl]="orderDetailForm.controls.category"
+                        [typeahead]="previouslyEnteredCategories">
+                    <div [hidden]="orderDetailForm.controls.category.valid || orderDetailForm.controls.category.pristine" class="alert alert-danger">
+                        Please enter in a value.
+                    </div>
+                </div>                
+                <div class="form-group col">
+                    <label>Sub Category</label>
+                    <input type="text" class="form-control" [formControl]="orderDetailForm.controls.subcategory"
+                        [typeahead]="previouslyEnteredSubcategories">
+                    <div [hidden]="orderDetailForm.controls.subcategory.valid || orderDetailForm.controls.subcategory.pristine" class="alert alert-danger">
+                        Please enter in a value.
+                    </div>
+                </div>
+                <div class="form-group col">
+                    <label>Item Cost</label>
+                    <input type="number" class="form-control" [formControl]="orderDetailForm.controls.itemCost">
+                    <div [hidden]="orderDetailForm.controls.itemCost.valid || orderDetailForm.controls.itemCost.pristine" class="alert alert-danger">
+                        Please enter in a number.
+                    </div>
+                </div>                
+                <div class="form-group col">
                     <label>Price Item Will Be Sold At</label>
                     <input type="number" class="form-control" [formControl]="orderDetailForm.controls.sellPrice">
                     <div [hidden]="orderDetailForm.controls.sellPrice.valid || orderDetailForm.controls.sellPrice.pristine" class="alert alert-danger">
                         Please enter in a number.
                     </div>
                 </div>
-            </div>
+            </div> 
 
             <div class="text-center" *ngIf="orderDetailFormArray.length > 1">
                 <button class="btn btn-link" (click)="removeItemInputFields(formIndex)">Remove Item Details</button>

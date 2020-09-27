@@ -23,7 +23,7 @@ export class YearlyProfitStatisticsComponent implements OnInit {
   hasSoldItems: boolean;
 
   constructor(private route: ActivatedRoute, private yearlyChartService: YearlyChartService) {
-    this.chartSize = [innerWidth / 1.1, 500];
+    this.chartSize = this.yearlyChartService.calculateChartSize();
   }
 
   ngOnInit(): void {
@@ -56,9 +56,7 @@ export class YearlyProfitStatisticsComponent implements OnInit {
   }
 
   onResize(event) {
-    this.chartSize = [event.target.innerWidth / 1.1, 500];
+    this.chartSize = this.yearlyChartService.calculateChartSize(event);
   }
 
 }
-
-//TODO: Year To Date

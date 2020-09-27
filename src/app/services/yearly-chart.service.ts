@@ -314,5 +314,11 @@ export class YearlyChartService {
     return earliestYear;
   }
 
+  calculateChartSize(event?): number[] {    
+    const width = (event ? event.target.innerWidth : innerWidth) / 1.1;    
+    const height = 500;
+    return[width, height];    
+  }
+
 
 }
